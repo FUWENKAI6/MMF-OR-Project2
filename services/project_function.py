@@ -10,7 +10,13 @@ def project_function(periodReturns, periodFactRet, x0):
     :param periodFactRet:
     :return: the allocation as a vector
     """
+    # OLS_MVO
     Strategy = OLS_MVO()
     x, mu = Strategy.execute_strategy(periodReturns, periodFactRet)
+
+    #--------------------------------------------
+    # cVAR
+    # Strategy = CVaR_Optimization(NumObs=36, alpha=0.95)
+    # x = Strategy.execute_strategy(periodReturns)
     return x, mu # remove mu after develop
 
