@@ -38,7 +38,6 @@ def OLS(returns, factRet):
     # Sometimes quadprog shows a warning if the covariance matrix is not
     # perfectly symmetric.
     Q = (Q + Q.T) / 2
-
     return mu, Q
 
 if __name__ == '__main__':

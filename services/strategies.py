@@ -1,4 +1,6 @@
 import numpy as np
+import sys
+sys.path.append('/Users/fuwenkai/Documents/U of T/MMF/MMF 1921 Operations Research/MMF Project 2/Code')
 from services.estimators import *
 from services.optimization import *
 

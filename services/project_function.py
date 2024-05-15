@@ -1,4 +1,6 @@
 from services.strategies import *
+import sys
+sys.path.append('/Users/fuwenkai/Documents/U of T/MMF/MMF 1921 Operations Research/MMF Project 2/Code')
 
 
 def project_function(periodReturns, periodFactRet, x0):
