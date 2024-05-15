@@ -47,23 +47,25 @@ def MVO(mu, Q):
     prob.solve(verbose=False)
     return x.value
 
-def robustMVO(mu, Q, lambda_=0.02, alpha=0.95, T=20):
+def robustMVO(mu, Q, lambda_, alpha, T=182, epsilon_factor=1.96):
     """
     Construct a robust MVO portfolio considering uncertainties in mu and Q.
+    
     Args:
         mu (np.ndarray): Expected returns.
         Q (np.ndarray): Covariance matrix.
         lambda_ (float): Risk aversion coefficient.
         alpha (float): Confidence level.
         T (int): Number of return observations.
+        
     Returns:
         np.ndarray: Optimal portfolio weights.
     """
     # Number of assets
     n = len(mu)
     
-    # Radius of the uncertainty set
-    ep = np.sqrt(chi2.ppf(alpha, n))
+    # Radius of the ellipsoidal uncertainty set
+    epsilon2 = np.sqrt(chi2.ppf(alpha, n))
     
     # Squared standard error of expected returns
     Theta = np.diag(np.diag(Q)) / T
@@ -71,26 +73,41 @@ def robustMVO(mu, Q, lambda_=0.02, alpha=0.95, T=20):
     # Square root of Theta
     sqrtTh = np.sqrt(Theta)
     
+    # Bounds for the box uncertainty set
+    delta = epsilon_factor * np.diag(sqrtTh)
+    
     # Initial portfolio (equally weighted)
     x0 = np.ones(n) / n
     
     # Variables
     x = cp.Variable(n)
+    y = cp.Variable(n)  # Auxiliary variable for absolute values in box uncertainty set
     
     # Objective function
-    objective = cp.Minimize(lambda_ * cp.quad_form(x, Q) - mu.T @ x + ep * cp.norm(sqrtTh @ x))
+    objective = cp.Minimize(lambda_ * cp.quad_form(x, Q) - mu.T @ x + epsilon2 * cp.norm(sqrtTh @ x))
     
     # Constraints
     constraints = [
         cp.sum(x) == 1,  # Sum of weights equals 1
-        x >= 0           # No short sales
+        x >= 0,          # No short sales
+        y >= x,          # Auxiliary variable constraints for box uncertainty set
+        y >= -x,
+        mu.T @ x - delta.T @ y >= 0  # Penalized return constraint with box uncertainty
     ]
     
     # Problem
     prob = cp.Problem(objective, constraints)
-    prob.solve()
-    
-    return x.value
+    prob.solve(solver=cp.ECOS)
+    #print (x.value)
+    #return x.value
+
+    # Check if the problem was solved successfully
+    if prob.status not in ["infeasible", "unbounded"]:
+        return x.value
+    else:
+        print("Problem status:", prob.status)
+        return None
+
 
 def CVaR(mu, Q, returns, alpha=0.95):
     T, n = returns.shape  # T: number of periods, n: number of assets
