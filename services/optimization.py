@@ -48,3 +48,49 @@ def MVO(mu, Q):
     return x.value
 
 
+from scipy.stats import chi2
+
+def robustMVO(mu, Q, lambda_=0.02, alpha=0.95, T=20):
+    """
+    Construct a robust MVO portfolio considering uncertainties in mu and Q.
+    Args:
+        mu (np.ndarray): Expected returns.
+        Q (np.ndarray): Covariance matrix.
+        lambda_ (float): Risk aversion coefficient.
+        alpha (float): Confidence level.
+        T (int): Number of return observations.
+    Returns:
+        np.ndarray: Optimal portfolio weights.
+    """
+    # Number of assets
+    n = len(mu)
+    
+    # Radius of the uncertainty set
+    ep = np.sqrt(chi2.ppf(alpha, n))
+    
+    # Squared standard error of expected returns
+    Theta = np.diag(np.diag(Q)) / T
+    
+    # Square root of Theta
+    sqrtTh = np.sqrt(Theta)
+    
+    # Initial portfolio (equally weighted)
+    x0 = np.ones(n) / n
+    
+    # Variables
+    x = cp.Variable(n)
+    
+    # Objective function
+    objective = cp.Minimize(lambda_ * cp.quad_form(x, Q) - mu.T @ x + ep * cp.norm(sqrtTh @ x))
+    
+    # Constraints
+    constraints = [
+        cp.sum(x) == 1,  # Sum of weights equals 1
+        x >= 0           # No short sales
+    ]
+    
+    # Problem
+    prob = cp.Problem(objective, constraints)
+    prob.solve()
+    
+    return x.value
