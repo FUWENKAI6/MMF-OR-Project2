@@ -1,7 +1,7 @@
-from services.strategies import *
 import sys
 sys.path.append('/Users/fuwenkai/Documents/U of T/MMF/MMF 1921 Operations Research/MMF Project 2/Code')
-
+# Delete above line if necessary
+from services.strategies import *
 
 def project_function(periodReturns, periodFactRet, x0):
     """
@@ -11,6 +11,6 @@ def project_function(periodReturns, periodFactRet, x0):
     :return: the allocation as a vector
     """
     Strategy = OLS_MVO()
-    x = Strategy.execute_strategy(periodReturns, periodFactRet)
-    return x
+    x, mu = Strategy.execute_strategy(periodReturns, periodFactRet)
+    return x, mu # remove mu after develop
 

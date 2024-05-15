@@ -1,6 +1,7 @@
-import numpy as np
 import sys
 sys.path.append('/Users/fuwenkai/Documents/U of T/MMF/MMF 1921 Operations Research/MMF Project 2/Code')
+# Delete above line if necessary
+import numpy as np
 from services.estimators import *
 from services.optimization import *
 
@@ -68,4 +69,4 @@ class OLS_MVO:
         factRet = factorReturns.iloc[(-1) * self.NumObs:, :]
         mu, Q = OLS(returns, factRet)
         x = MVO(mu, Q)
-        return x
+        return x, mu # remove mu after develop
