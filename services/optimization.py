@@ -1,6 +1,6 @@
 import cvxpy as cp
 import numpy as np
-
+from scipy.stats import chi2
 # 1. CVAR - Kai
 # 2. Robust MVO - Grace
 # 3. MVO - Given
@@ -47,9 +47,6 @@ def MVO(mu, Q):
     prob.solve(verbose=False)
     return x.value
 
-
-from scipy.stats import chi2
-
 def robustMVO(mu, Q, lambda_=0.02, alpha=0.95, T=20):
     """
     Construct a robust MVO portfolio considering uncertainties in mu and Q.
@@ -94,3 +91,29 @@ def robustMVO(mu, Q, lambda_=0.02, alpha=0.95, T=20):
     prob.solve()
     
     return x.value
+
+def CVaR(mu, Q, returns, alpha=0.95):
+    T, n = returns.shape  # T: number of periods, n: number of assets
+
+    # Define variables
+    w = cp.Variable(n)  # Portfolio weights
+    VaR = cp.Variable()  # Value at Risk
+    u = cp.Variable(T)  # Auxiliary variables
+
+    # Define constraints
+    constraints = [
+        cp.sum(w) == 1,  # Sum of weights equals 1 (no leverage)
+        w >= 0,  # No short selling
+        u >= 0,  # Auxiliary variables must be non-negative
+        u >= -returns @ w - VaR  # CVaR constraint
+    ]
+
+    # Define the objective function
+    objective = cp.Minimize(VaR + (1 / (T * (1 - alpha))) * cp.sum(u))
+
+    # Solve the problem
+    problem = cp.Problem(objective, constraints)
+    problem.solve()
+
+    # Return the optimal portfolio weights
+    return w.value
