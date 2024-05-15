@@ -70,3 +70,119 @@ class OLS_MVO:
         mu, Q = OLS(returns, factRet)
         x = MVO(mu, Q)
         return x, mu # remove mu after develop
+
+class OLS_CVAR:
+    """
+    uses historical returns to estimate the covariance matrix and expected return
+    """
+
+    def __init__(self, NumObs=36):
+        self.NumObs = NumObs  # number of observations to use
+class OLS_RMVO:
+    """
+    uses historical returns to estimate the covariance matrix and expected return
+    """
+
+    def __init__(self, NumObs=36):
+        self.NumObs = NumObs  # number of observations to use
+
+class OLS_RP:
+    """
+    uses historical returns to estimate the covariance matrix and expected return
+    """
+
+    def __init__(self, NumObs=36):
+        self.NumObs = NumObs  # number of observations to use
+
+class LASSO_MVO:
+    """
+    uses historical returns to estimate the covariance matrix and expected return
+    """
+
+    def __init__(self, NumObs=36):
+        self.NumObs = NumObs  # number of observations to use
+
+class LASSO_CVAR:
+    """
+    uses historical returns to estimate the covariance matrix and expected return
+    """
+
+    def __init__(self, NumObs=36):
+        self.NumObs = NumObs  # number of observations to use
+class LASSO_RMVO:
+    """
+    uses historical returns to estimate the covariance matrix and expected return
+    """
+
+    def __init__(self, NumObs=36):
+        self.NumObs = NumObs  # number of observations to use
+
+class LASSO_RP:
+    """
+    uses historical returns to estimate the covariance matrix and expected return
+    """
+
+    def __init__(self, NumObs=36):
+        self.NumObs = NumObs  # number of observations to use
+
+class BSS_MVO:
+    """
+    uses historical returns to estimate the covariance matrix and expected return
+    """
+
+    def __init__(self, NumObs=36):
+        self.NumObs = NumObs  # number of observations to use
+
+class BSS_CVAR:
+    """
+    uses historical returns to estimate the covariance matrix and expected return
+    """
+
+    def __init__(self, NumObs=36):
+        self.NumObs = NumObs  # number of observations to use
+class BSS_RMVO:
+    """
+    uses historical returns to estimate the covariance matrix and expected return
+    """
+
+    def __init__(self, NumObs=36):
+        self.NumObs = NumObs  # number of observations to use
+
+class BSS_RP:
+    """
+    uses historical returns to estimate the covariance matrix and expected return
+    """
+
+    def __init__(self, NumObs=36):
+        self.NumObs = NumObs  # number of observations to use
+
+class FF_MVO:
+    """
+    uses historical returns to estimate the covariance matrix and expected return
+    """
+
+    def __init__(self, NumObs=36):
+        self.NumObs = NumObs  # number of observations to use
+
+class FF_CVAR:
+    """
+    uses historical returns to estimate the covariance matrix and expected return
+    """
+
+    def __init__(self, NumObs=36):
+        self.NumObs = NumObs  # number of observations to use
+class FF_RMVO:
+    """
+    uses historical returns to estimate the covariance matrix and expected return
+    """
+
+    def __init__(self, NumObs=36):
+        self.NumObs = NumObs  # number of observations to use
+
+class FF_RP:
+    """
+    uses historical returns to estimate the covariance matrix and expected return
+    """
+
+    def __init__(self, NumObs=36):
+        self.NumObs = NumObs  # number of observations to use
